@@ -1,5 +1,6 @@
 package org.example.scheduleprojectv2.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.CreateEventRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
@@ -17,15 +18,22 @@ public class EventService {
 
   // 할일 생성
   public EventResponseDTO save(CreateEventRequestDTO requestDTO) {
-    System.out.println("BEFORE FIND USER!!!!");
     User user = userRepository.findUserByEmailOrElseThrow(requestDTO.getEmail());
-    System.out.println("FIND USER AFTER!!!!");
     Event event = eventRepository.save(new Event(requestDTO, user));
-    System.out.println("SAVE AFTER!!!");
     return new EventResponseDTO(event);
   }
 
-  // 할일 조회
+  // 할일 단건 조회
+  public EventResponseDTO findById(Long id) {
+    return new EventResponseDTO(eventRepository.findByIdOrElseThrow(id));
+  }
+
+  // 할일 전체 조회
+  public List<EventResponseDTO> findAll() {
+    return eventRepository.findAll().stream()
+        .map(EventResponseDTO::new)
+        .toList();
+  }
 
   // 할일 수정
 
