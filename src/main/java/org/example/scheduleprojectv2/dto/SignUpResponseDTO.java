@@ -5,9 +5,9 @@ import org.example.scheduleprojectv2.entity.User;
 
 @Getter
 public class SignUpResponseDTO {
-  private Long id;
-  private String email;
-  private String name;
+  private final Long id;
+  private final String email;
+  private final String name;
 
   // Entity --> SignUpResponseDTO
   public SignUpResponseDTO(User user) {

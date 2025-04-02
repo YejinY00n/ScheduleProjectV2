@@ -1,11 +1,13 @@
 package org.example.scheduleprojectv2.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class UserUpdateRequestDTO {
-  private String email;
-  private String oldPassword;
-  private String newPassword;
-  private String name;
+  private final String email;
+  private final String oldPassword;
+  private final String newPassword;
+  private final String name;
 }

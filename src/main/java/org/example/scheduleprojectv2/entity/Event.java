@@ -10,13 +10,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.example.scheduleprojectv2.dto.CreateEventRequestDTO;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+@ToString
 @Entity
 @Getter
 @Table(name = "event")
-public class Event {
+public class Event extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -33,7 +37,17 @@ public class Event {
   @Column(nullable = false)
   private LocalDateTime modifiedAt;
 
+  @Setter
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
+
+  public Event(CreateEventRequestDTO requestDTO, User user) {
+    this.task = requestDTO.getTask();
+    this.user = user;
+  }
+
+  public Event() {
+
+  }
 }

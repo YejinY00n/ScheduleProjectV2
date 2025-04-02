@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SignUpRequestDTO {
+public class CreateEventRequestDTO {
+  private final String task;
   private final String email;
-  private final String password;
-  private final String name;
 }
