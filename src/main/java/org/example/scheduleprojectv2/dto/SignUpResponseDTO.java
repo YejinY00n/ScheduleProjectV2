@@ -1,2 +1,18 @@
-package org.example.scheduleprojectv2.dto;public class SignUpResponseDTO {
+package org.example.scheduleprojectv2.dto;
+
+import lombok.Getter;
+import org.example.scheduleprojectv2.entity.User;
+
+@Getter
+public class SignUpResponseDTO {
+  private Long id;
+  private String email;
+  private String name;
+
+  // Entity --> SignUpResponseDTO
+  public SignUpResponseDTO(User user) {
+    this.id = user.getId();
+    this.email = user.getEmail();
+    this.name = user.getName();
+  }
 }
