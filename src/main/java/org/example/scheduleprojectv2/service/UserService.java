@@ -35,6 +35,7 @@ public class UserService {
 
   // 유저 삭제
   public void delete(Long id) {
-    userRepository.deleteById(id);
+    User user = userRepository.findByIdOrElseThrow(id);
+    userRepository.delete(user);
   }
 }

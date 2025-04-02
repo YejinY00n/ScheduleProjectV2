@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CreateEventRequestDTO {
+public class EventUpdateRequestDTO {
   private final String task;
-  private final String email;
 }

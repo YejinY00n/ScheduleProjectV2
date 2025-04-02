@@ -2,14 +2,17 @@ package org.example.scheduleprojectv2.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.scheduleprojectv2.dto.CreateEventRequestDTO;
+import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
+import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
 import org.example.scheduleprojectv2.service.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +25,7 @@ public class EventController {
 
   // 할일 생성
   @PostMapping("")
-  public ResponseEntity<EventResponseDTO> create(@RequestBody CreateEventRequestDTO requestDTO) {
+  public ResponseEntity<EventResponseDTO> create(@RequestBody EventCreateRequestDTO requestDTO) {
     return new ResponseEntity<EventResponseDTO>(eventService.save(requestDTO), HttpStatus.CREATED);
   }
 
@@ -39,6 +42,16 @@ public class EventController {
   }
 
   // 할일 수정
+  @PutMapping("/{id}")
+  public ResponseEntity<EventResponseDTO> update(
+      @PathVariable Long id, @RequestBody EventUpdateRequestDTO requestDTO) {
+    return new ResponseEntity<EventResponseDTO>(eventService.update(id, requestDTO), HttpStatus.OK);
+  }
 
   // 할일 삭제
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    eventService.delete(id);
+    return new ResponseEntity<Void>(HttpStatus.OK);
+  }
 }

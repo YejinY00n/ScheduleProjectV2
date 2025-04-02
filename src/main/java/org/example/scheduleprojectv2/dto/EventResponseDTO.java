@@ -19,4 +19,5 @@ public class EventResponseDTO {
     this.createdAt = event.getCreatedAt();
     this.modifiedAt = event.getModifiedAt();
   }
+
 }

@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.example.scheduleprojectv2.dto.CreateEventRequestDTO;
+import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
+import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -42,12 +43,16 @@ public class Event extends BaseEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Event(CreateEventRequestDTO requestDTO, User user) {
+  public Event(EventCreateRequestDTO requestDTO, User user) {
     this.task = requestDTO.getTask();
     this.user = user;
   }
 
   public Event() {
 
+  }
+
+  public void update(EventUpdateRequestDTO requestDTO) {
+    this.task = requestDTO.getTask();
   }
 }
