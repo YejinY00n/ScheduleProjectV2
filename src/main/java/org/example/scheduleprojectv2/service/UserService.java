@@ -1,6 +1,8 @@
 package org.example.scheduleprojectv2.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleprojectv2.dto.LoginRequestDTO;
+import org.example.scheduleprojectv2.dto.LoginResponseDTO;
 import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
 import org.example.scheduleprojectv2.dto.UserResponseDTO;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
   private final UserRepository userRepository;
 
-  // TODO: JWT 적용
   // 유저 생성
   public SignUpResponseDTO signUp(SignUpRequestDTO requestDTO) {
     User savedUser = userRepository.save(new User(requestDTO));
@@ -37,5 +38,13 @@ public class UserService {
   public void delete(Long id) {
     User user = userRepository.findByIdOrElseThrow(id);
     userRepository.delete(user);
+  }
+
+  // 유저 로그인
+  public LoginResponseDTO login(LoginRequestDTO requestDTO) {
+    // TODO: 로그인 성공 시 리턴값 어떻게 할지 고려
+    // email, password 일치 조회
+    Long id = userRepository.findIdByEmailAndPasswordAndOrElseThrow(requestDTO.getEmail(), requestDTO.getPassword());
+    return new LoginResponseDTO(id);
   }
 }
