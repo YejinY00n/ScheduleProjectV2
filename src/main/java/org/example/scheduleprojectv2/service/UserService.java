@@ -40,8 +40,8 @@ public class UserService {
     if(!isValidPassword(user, requestDTO.getPassword())) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
-    // 이메일이 중복이라면
-    if(isExistsEmail(requestDTO.getEmail())) {
+    // 현재 쓰는 이메일이 아니고, 이메일이 중복이라면
+    if(!user.getEmail().equals(requestDTO.getEmail()) && isExistsEmail(requestDTO.getEmail())) {
       throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
     }
 
