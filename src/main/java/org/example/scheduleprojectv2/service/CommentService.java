@@ -2,6 +2,7 @@ package org.example.scheduleprojectv2.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleprojectv2.config.PasswordEncoder;
 import org.example.scheduleprojectv2.dto.CommentCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.CommentResponseDTO;
 import org.example.scheduleprojectv2.dto.CommentUpdateRequestDTO;
@@ -23,6 +24,7 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
   private final EventRepository eventRepository;
+  private final PasswordEncoder passwordEncoder;
 
   // 댓글 작성
   public CommentResponseDTO save(Long eventId, CommentCreateRequestDTO requestDTO) {
@@ -44,7 +46,7 @@ public class CommentService {
   public CommentResponseDTO update(Long commentId, CommentUpdateRequestDTO requestDTO) {
     Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
-    if(!isValidPassword(comment, requestDTO.getPassword())) {
+    if(!isValidPassword(requestDTO.getPassword(), comment)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
     comment.update(requestDTO);
@@ -55,14 +57,14 @@ public class CommentService {
   public void delete(Long commentId, PasswordDTO passwordDTO) {
     Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
-    if(!isValidPassword(comment, passwordDTO.getPassword())) {
+    if(!isValidPassword(passwordDTO.getPassword(), comment)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
     commentRepository.delete(comment);
   }
 
   // 비밀번호 검증
-  public boolean isValidPassword(Comment comment, String password) {
-    return comment.getUser().getPassword().equals(password);
+  public boolean isValidPassword(String password, Comment comment) {
+    return passwordEncoder.matches(password, comment.getUser().getPassword());
   }
 }

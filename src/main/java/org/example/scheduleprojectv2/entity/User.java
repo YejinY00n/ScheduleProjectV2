@@ -32,9 +32,9 @@ public class User {
   }
 
   // SignUpRequestDTO --> Entity
-  public User(SignUpRequestDTO requestDTO) {
+  public User(SignUpRequestDTO requestDTO, String password) {
     this.email = requestDTO.getEmail();
-    this.password = requestDTO.getPassword();
+    this.password = password;
     this.name = requestDTO.getName();
   }
 

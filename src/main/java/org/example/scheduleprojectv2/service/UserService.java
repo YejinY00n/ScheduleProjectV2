@@ -1,6 +1,7 @@
 package org.example.scheduleprojectv2.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleprojectv2.config.PasswordEncoder;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
 import org.example.scheduleprojectv2.dto.LoginResponseDTO;
 import org.example.scheduleprojectv2.dto.PasswordDTO;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   // 유저 생성
   public SignUpResponseDTO signUp(SignUpRequestDTO requestDTO) {
@@ -27,8 +29,8 @@ public class UserService {
     if(isExistsEmail(requestDTO.getEmail())) {
       throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
     }
-
-    User savedUser = userRepository.save(new User(requestDTO));
+    String encodedPassword = passwordEncoder.encode(requestDTO.getPassword());
+    User savedUser = userRepository.save(new User(requestDTO, encodedPassword));
     return new SignUpResponseDTO(savedUser);
   }
 
@@ -42,7 +44,7 @@ public class UserService {
   public UserResponseDTO update(Long id, UserUpdateRequestDTO requestDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
     // 패스워드가 일치하지 않는다면
-    if(!isValidPassword(user, requestDTO.getPassword())) {
+    if(!isValidPassword(requestDTO.getPassword(), user)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
     // 현재 쓰는 이메일이 아니고, 이메일이 중복이라면
@@ -59,10 +61,11 @@ public class UserService {
   public void updatePassword(Long id, PasswordUpdateRequestDTO requestDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
     // 패스워드가 일치하지 않는다면
-    if(!isValidPassword(user, requestDTO.getOldPassword())) {
+    if(!isValidPassword(requestDTO.getOldPassword(), user)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
-    user.updatePassword(requestDTO.getNewPassword());
+    String encodedPassword = passwordEncoder.encode(requestDTO.getNewPassword());
+    user.updatePassword(encodedPassword);
   }
 
 
@@ -70,7 +73,7 @@ public class UserService {
   public void delete(Long id, PasswordDTO passwordDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
     // 패스워드가 일치하지 않는다면
-    if(!isValidPassword(user, passwordDTO.getPassword())) {
+    if(!isValidPassword(passwordDTO.getPassword(), user)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
 
@@ -81,11 +84,10 @@ public class UserService {
   // 유저 로그인
   public LoginResponseDTO login(LoginRequestDTO requestDTO) {
     // email 일치 회원 조회
-    // TODO: 레포지토리에서 USER_NOT_FOUND 에러 던지게 했는데 이게 맞을까?
     User user = userRepository.findByEmailOrElseThrow(requestDTO.getEmail());
 
     // 패스워드가 일치하지 않는다면
-    if(!isValidPassword(user, requestDTO.getPassword())) {
+    if(!isValidPassword(requestDTO.getPassword(), user)) {
       throw new CustomException(ErrorCode.INVALID_PASSWORD);
     }
 
@@ -93,8 +95,8 @@ public class UserService {
   }
 
   // 저장된 비밀번호와 일치 여부
-  private boolean isValidPassword(User user, String password) {
-    return user.getPassword().equals(password);
+  private boolean isValidPassword(String password, User user) {
+    return passwordEncoder.matches(password, user.getPassword());
   }
 
   // 이메일 중복 검사

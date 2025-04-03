@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduleprojectv2.config.PasswordEncoder;
 import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
 import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EventService {
   private final EventRepository eventRepository;
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   // 할일 생성
   public EventResponseDTO save(EventCreateRequestDTO requestDTO) {
@@ -95,7 +97,7 @@ public class EventService {
 
   // 비밀번호 검증
   private boolean isValidPassword(Event event, String password) {
-    return event.getUser().getPassword().equals(password);
+    return passwordEncoder.matches(password, event.getUser().getPassword());
   }
 
   // 유효한 기간인지 검증하는 메소드
