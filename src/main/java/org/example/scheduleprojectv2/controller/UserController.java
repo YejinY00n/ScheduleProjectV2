@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
   private final UserService userService;
 
-  // TODO: validation 추가
   // 유저 생성
   @PostMapping("/signup")
   public ResponseEntity<SignUpResponseDTO> signUp(@RequestBody SignUpRequestDTO requestDto) {

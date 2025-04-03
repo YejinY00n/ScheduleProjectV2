@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
   private final CommentService commentService;
 
-  // TODO: 세션에 데이터 저장 방식 고려
   // 댓글 작성
   @PostMapping()
   public ResponseEntity<CommentResponseDTO> create(
