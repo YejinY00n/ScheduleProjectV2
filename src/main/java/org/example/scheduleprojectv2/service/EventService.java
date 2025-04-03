@@ -7,6 +7,8 @@ import org.example.scheduleprojectv2.dto.EventResponseDTO;
 import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
 import org.example.scheduleprojectv2.entity.Event;
 import org.example.scheduleprojectv2.entity.User;
+import org.example.scheduleprojectv2.exception.CustomException;
+import org.example.scheduleprojectv2.exception.ErrorCode;
 import org.example.scheduleprojectv2.repository.EventRepository;
 import org.example.scheduleprojectv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -38,17 +40,26 @@ public class EventService {
   }
 
   // 할일 수정
-  // TODO: 비밀번호 검증
   @Transactional
   public EventResponseDTO update(Long id, EventUpdateRequestDTO requestDTO) {
     Event event = eventRepository.findByIdOrElseThrow(id);
+
+    if(!isValidPassword(event, requestDTO.getPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
     event.update(requestDTO);
     return new EventResponseDTO(event);
   }
+
 
   // 할일 삭제
   public void delete(Long id) {
     Event event = eventRepository.findByIdOrElseThrow(id);
     eventRepository.delete(event);
+  }
+
+  // 비밀번호 검증  // TODO: 이거 공통 로직으로 처리하게 할 수 있나?
+  private boolean isValidPassword(Event event, String password) {
+    return event.getUser().getPassword().equals(password);
   }
 }

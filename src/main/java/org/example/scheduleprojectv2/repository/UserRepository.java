@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  Optional<User> findUserByEmail(String name);
+  Optional<User> findByEmail(String name);
   Optional<User> findByEmailAndPassword(String email, String password);
 
   default User findByIdOrElseThrow(Long id) {
@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   }
 
   default User findByEmailOrElseThrow(String email) {
-    return findUserByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+    return findByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 }

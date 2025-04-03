@@ -14,6 +14,7 @@ public enum ErrorCode {
   // User
   USER_NOT_FOUND(404, "Not Found", "U001", "User Not Found"), // 일치하는 이메일이 없다면
   INVALID_PASSWORD(401, "Unauthorized", "U002", "Invalid Password"),  // 비밀번호 오류
+  EMAIL_DUPLICATION(400, "Bad Request", "U003", "Email is Duplicated"),  // 이메일 중복
 
   // Event
 

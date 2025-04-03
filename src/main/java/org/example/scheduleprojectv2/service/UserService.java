@@ -21,6 +21,7 @@ public class UserService {
 
   // 유저 생성
   public SignUpResponseDTO signUp(SignUpRequestDTO requestDTO) {
+    // TODO: email 중복 검사
     User savedUser = userRepository.save(new User(requestDTO));
     return new SignUpResponseDTO(savedUser);
   }
@@ -34,9 +35,19 @@ public class UserService {
   @Transactional
   public UserResponseDTO update(Long id, UserUpdateRequestDTO requestDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
+    // 패스워드가 일치하지 않는다면
+    if(!isValidPassword(user, requestDTO.getPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
+    // 이메일이 중복이라면
+    if(isExistsEmail(requestDTO.getEmail())) {
+      throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
+    }
+
     user.update(requestDTO);
     return new UserResponseDTO(user);
   }
+
 
   // 유저 삭제
   public void delete(Long id) {
@@ -63,5 +74,10 @@ public class UserService {
   // 저장된 비밀번호와 일치 여부
   private boolean isValidPassword(User user, String password) {
     return user.getPassword().equals(password);
+  }
+
+  // 이메일 중복 검사
+  private boolean isExistsEmail(String email) {
+    return userRepository.findByEmail(email).isPresent();
   }
 }

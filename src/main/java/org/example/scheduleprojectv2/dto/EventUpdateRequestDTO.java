@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class EventUpdateRequestDTO {
-  private final String task;
+  private final String task;    // TODO: Valid
+  private final String password;
 }
