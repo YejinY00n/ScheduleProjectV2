@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
 import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
+import org.example.scheduleprojectv2.dto.PasswordDTO;
 import org.example.scheduleprojectv2.service.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,10 +50,9 @@ public class EventController {
   }
 
   // 할일 삭제
-  // TODO: 비밀번호 검증
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    eventService.delete(id);
+  public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PasswordDTO passwordDTO) {
+    eventService.delete(id, passwordDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

@@ -69,14 +69,12 @@ public class UserController {
   }
 
   // 유저 삭제
-  // TODO: 비밀번호 검증
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PasswordDTO passwordDTO) {
     userService.delete(id, passwordDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  // TODO: 로그인 컨트롤러 따로 분리?
   // 유저 로그인
   @PostMapping("/login")
   public String login(@Valid @ModelAttribute LoginRequestDTO requestDTO,

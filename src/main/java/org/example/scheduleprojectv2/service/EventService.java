@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
 import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
+import org.example.scheduleprojectv2.dto.PasswordDTO;
 import org.example.scheduleprojectv2.entity.Event;
 import org.example.scheduleprojectv2.entity.User;
 import org.example.scheduleprojectv2.exception.CustomException;
@@ -53,8 +54,12 @@ public class EventService {
 
 
   // 할일 삭제
-  public void delete(Long id) {
+  public void delete(Long id, PasswordDTO passwordDTO) {
     Event event = eventRepository.findByIdOrElseThrow(id);
+    // 패스워드가 일치하지 않는다면
+    if(!isValidPassword(event, passwordDTO.getPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
     eventRepository.delete(event);
   }
 
