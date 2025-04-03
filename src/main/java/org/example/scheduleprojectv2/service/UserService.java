@@ -3,6 +3,7 @@ package org.example.scheduleprojectv2.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
 import org.example.scheduleprojectv2.dto.LoginResponseDTO;
+import org.example.scheduleprojectv2.dto.PasswordUpdateRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
 import org.example.scheduleprojectv2.dto.UserResponseDTO;
@@ -48,6 +49,17 @@ public class UserService {
     return new UserResponseDTO(user);
   }
 
+  // 유저 비밀번호 변경
+  @Transactional
+  public void updatePassword(Long id, PasswordUpdateRequestDTO requestDTO) {
+    User user = userRepository.findByIdOrElseThrow(id);
+    // 패스워드가 일치하지 않는다면
+    if(!isValidPassword(user, requestDTO.getOldPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
+    user.updatePassword(requestDTO.getNewPassword());
+  }
+
 
   // 유저 삭제
   public void delete(Long id) {
@@ -55,7 +67,6 @@ public class UserService {
     userRepository.delete(user);
   }
 
-  // TODO: 비밀번호 업데이트
 
   // 유저 로그인
   public LoginResponseDTO login(LoginRequestDTO requestDTO) {

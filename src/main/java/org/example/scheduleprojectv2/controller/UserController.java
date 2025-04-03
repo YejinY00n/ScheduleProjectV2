@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.common.Const;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
 import org.example.scheduleprojectv2.dto.LoginResponseDTO;
+import org.example.scheduleprojectv2.dto.PasswordUpdateRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
 import org.example.scheduleprojectv2.dto.UserResponseDTO;
@@ -56,6 +57,14 @@ public class UserController {
   public ResponseEntity<UserResponseDTO> update(@PathVariable Long id,
       @RequestBody UserUpdateRequestDTO requestDTO) {
     return new ResponseEntity<>(userService.update(id, requestDTO), HttpStatus.OK);
+  }
+
+  // 유저 비밀번호 수정
+  @PutMapping("/{id}/password")
+  public ResponseEntity<Void> updatePassword(@PathVariable Long id,
+      @RequestBody PasswordUpdateRequestDTO requestDTO) {
+    userService.updatePassword(id, requestDTO);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   // 유저 삭제

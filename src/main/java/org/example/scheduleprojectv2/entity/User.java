@@ -40,7 +40,11 @@ public class User {
 
   public void update(UserUpdateRequestDTO requestDTO) {
     this.email = requestDTO.getEmail();
-    this.password = requestDTO.getNewPassword();
+    this.password = requestDTO.getPassword();
     this.name = requestDTO.getName();
+  }
+
+  public void updatePassword(String newPassword) {
+    this.password = newPassword;
   }
 }
