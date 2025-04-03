@@ -19,7 +19,6 @@ public class LoginFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
     // Filter 에서 수행할 Logic
-    // TODO : 로그인 확인 필터 로직 추가
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     String requestURI = httpRequest.getRequestURI();
 

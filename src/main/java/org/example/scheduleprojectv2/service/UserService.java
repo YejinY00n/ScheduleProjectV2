@@ -46,7 +46,7 @@ public class UserService {
   public LoginResponseDTO login(LoginRequestDTO requestDTO) {
     // email 일치 회원 조회
     // TODO: 레포지토리에서 USER_NOT_FOUND 에러 던지게 했는데 이게 맞을까?
-    User user = userRepository.findUserByEmailOrElseThrow(requestDTO.getEmail());
+    User user = userRepository.findByEmailOrElseThrow(requestDTO.getEmail());
 
     // 패스워드가 일치하지 않는다면
     if(!isValidPassword(user, requestDTO.getPassword())) {

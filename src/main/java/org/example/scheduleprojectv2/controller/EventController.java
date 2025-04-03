@@ -26,13 +26,13 @@ public class EventController {
   // 할일 생성
   @PostMapping("")
   public ResponseEntity<EventResponseDTO> create(@RequestBody EventCreateRequestDTO requestDTO) {
-    return new ResponseEntity<EventResponseDTO>(eventService.save(requestDTO), HttpStatus.CREATED);
+    return new ResponseEntity<>(eventService.save(requestDTO), HttpStatus.CREATED);
   }
 
   // 할일 단건 조회
   @GetMapping("/{id}")
   public ResponseEntity<EventResponseDTO> findById(@PathVariable Long id) {
-    return new ResponseEntity<EventResponseDTO>(eventService.findById(id), HttpStatus.OK);
+    return new ResponseEntity<>(eventService.findById(id), HttpStatus.OK);
   }
 
   // 할일 전체 조회
@@ -45,13 +45,13 @@ public class EventController {
   @PutMapping("/{id}")
   public ResponseEntity<EventResponseDTO> update(
       @PathVariable Long id, @RequestBody EventUpdateRequestDTO requestDTO) {
-    return new ResponseEntity<EventResponseDTO>(eventService.update(id, requestDTO), HttpStatus.OK);
+    return new ResponseEntity<>(eventService.update(id, requestDTO), HttpStatus.OK);
   }
 
   // 할일 삭제
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     eventService.delete(id);
-    return new ResponseEntity<Void>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

@@ -5,9 +5,7 @@ import org.example.scheduleprojectv2.entity.User;
 import org.example.scheduleprojectv2.exception.CustomException;
 import org.example.scheduleprojectv2.exception.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,11 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByEmailAndPassword(String email, String password);
 
   default User findByIdOrElseThrow(Long id) {
-    return findById(id).orElseThrow(()
-        -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exists id = "+id));
+    return findById(id).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 
-  default User findUserByEmailOrElseThrow(String email) {
+  default User findByEmailOrElseThrow(String email) {
     return findUserByEmail(email).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 }

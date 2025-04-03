@@ -19,7 +19,7 @@ public class EventService {
 
   // 할일 생성
   public EventResponseDTO save(EventCreateRequestDTO requestDTO) {
-    User user = userRepository.findUserByEmailOrElseThrow(requestDTO.getEmail());
+    User user = userRepository.findByEmailOrElseThrow(requestDTO.getEmail());
     Event event = eventRepository.save(new Event(requestDTO, user));
     return new EventResponseDTO(event);
   }

@@ -7,37 +7,37 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
-import org.example.scheduleprojectv2.dto.EventUpdateRequestDTO;
+import org.example.scheduleprojectv2.dto.CommentCreateRequestDTO;
 
 @Entity
 @Getter
-@Table(name = "event")
-public class Event extends BaseEntity {
+@Table(name = "comment")
+public class Comment extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String task;
-
+  // TODO: @ManyToOne(cascade=CascadeType.ALL) 연관 관계 설정
   @Setter
   @ManyToOne
+  @JoinColumn(name = "event_id")
+  private Event event;
+
+  @Setter
+  @OneToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Event(EventCreateRequestDTO requestDTO, User user) {
-    this.task = requestDTO.getTask();
+  @Column(nullable = false)
+  private String content;
+
+  public Comment(CommentCreateRequestDTO requestDTO, User user, Event event) {
+    this.content = requestDTO.getContent();
     this.user = user;
-  }
-
-  public Event() {
-  }
-
-  public void update(EventUpdateRequestDTO requestDTO) {
-    this.task = requestDTO.getTask();
+    this.event = event;
   }
 }
