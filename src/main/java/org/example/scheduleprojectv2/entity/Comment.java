@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,7 @@ public class Comment extends BaseEntity {
   private Event event;
 
   @Setter
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -39,5 +38,9 @@ public class Comment extends BaseEntity {
     this.content = requestDTO.getContent();
     this.user = user;
     this.event = event;
+  }
+
+  public Comment() {
+
   }
 }

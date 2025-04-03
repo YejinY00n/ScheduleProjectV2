@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
   private final CommentService commentService;
 
+  // TODO: 세션에 데이터 저장 방식 고려
   // 댓글 작성
   @PostMapping()
   public ResponseEntity<CommentResponseDTO> create(
-      @PathVariable Long eventId, CommentCreateRequestDTO requestDTO) {
+      @PathVariable Long eventId, @RequestBody CommentCreateRequestDTO requestDTO) {
     return new ResponseEntity<>(commentService.save(eventId, requestDTO), HttpStatus.CREATED);
   }
 
