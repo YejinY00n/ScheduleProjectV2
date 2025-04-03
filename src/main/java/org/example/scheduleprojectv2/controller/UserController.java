@@ -88,7 +88,7 @@ public class UserController {
     // TODO: 세션에 어떤 정보 저장할지
     session.setAttribute(Const.LOGIN_USER, loginUser);
 
-    // TODO: 로그인 성공 시 리다이렉트
+    // TODO: 로그인 성공 시 리다이렉트 (PRG 패턴?)
     return "success";
   }
 
@@ -102,7 +102,7 @@ public class UserController {
     if(session != null) {
       session.invalidate();   // 해당 세션 삭제 (로그아웃)
     }
-    // TODO: 로그아웃 시 리다이렉트
+    // TODO: 로그아웃 시 리다이렉트 (PRG 패턴?)
     return "redirect";
   }
 

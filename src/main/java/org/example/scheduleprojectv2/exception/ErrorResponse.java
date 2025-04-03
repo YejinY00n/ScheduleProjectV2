@@ -1,23 +1,19 @@
 package org.example.scheduleprojectv2.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.EntityListeners;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 // 에러 응답 시 사용하는 DTO
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EntityListeners(AuditingEntityListener.class)
 public class ErrorResponse {
-  @CreatedDate
-  private final LocalDateTime timestamp;
+  @Builder.Default
+  private final LocalDateTime timestamp = LocalDateTime.now();
   private final int status;
   private final String error;
   private final String code;

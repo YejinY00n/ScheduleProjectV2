@@ -8,6 +8,8 @@ import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
 import org.example.scheduleprojectv2.dto.UserResponseDTO;
 import org.example.scheduleprojectv2.dto.UserUpdateRequestDTO;
 import org.example.scheduleprojectv2.entity.User;
+import org.example.scheduleprojectv2.exception.CustomException;
+import org.example.scheduleprojectv2.exception.ErrorCode;
 import org.example.scheduleprojectv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +44,20 @@ public class UserService {
 
   // 유저 로그인
   public LoginResponseDTO login(LoginRequestDTO requestDTO) {
-    // TODO: 로그인 성공 시 리턴값 어떻게 할지 고려
-    // email, password 일치 조회
-    Long id = userRepository.findIdByEmailAndPasswordAndOrElseThrow(requestDTO.getEmail(), requestDTO.getPassword());
-    return new LoginResponseDTO(id);
+    // email 일치 회원 조회
+    // TODO: 레포지토리에서 USER_NOT_FOUND 에러 던지게 했는데 이게 맞을까?
+    User user = userRepository.findUserByEmailOrElseThrow(requestDTO.getEmail());
+
+    // 패스워드가 일치하지 않는다면
+    if(!isValidPassword(user, requestDTO.getPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
+
+    return new LoginResponseDTO(user.getId());
+  }
+
+  // 저장된 비밀번호와 일치 여부
+  private boolean isValidPassword(User user, String password) {
+    return user.getPassword().equals(password);
   }
 }

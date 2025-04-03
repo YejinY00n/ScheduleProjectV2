@@ -9,10 +9,11 @@ import lombok.Getter;
 public enum ErrorCode {
   // Common
   // 값 없는 경우, 이메일 비어있는 경우
-  INVALID_INPUT_VALUE(400, "Bad Request", "C001", "Invalid Input Value");
+  INVALID_INPUT_VALUE(400, "Bad Request", "C001", "Invalid Input Value"),
 
   // User
-  // 로그인에서 이메일, 비번 일치하지 않는 경우
+  USER_NOT_FOUND(404, "Not Found", "U001", "User Not Found"), // 일치하는 이메일이 없다면
+  INVALID_PASSWORD(401, "Unauthorized", "U002", "Invalid Password");  // 비밀번호 오류
 
   // Event
 
