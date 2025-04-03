@@ -2,6 +2,7 @@ package org.example.scheduleprojectv2.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,6 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.scheduleprojectv2.dto.CommentCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.CommentUpdateRequestDTO;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -21,14 +24,15 @@ public class Comment extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // TODO: @ManyToOne(cascade=CascadeType.ALL) 연관 관계 설정
   @Setter
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "event_id")
   private Event event;
 
   @Setter
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id")
   private User user;
 
