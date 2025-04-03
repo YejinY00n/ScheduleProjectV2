@@ -71,18 +71,12 @@ public class UserController {
   public String login(@Valid @ModelAttribute LoginRequestDTO requestDTO,
       HttpServletRequest request) {
     LoginResponseDTO responseDTO = userService.login(requestDTO);
-    Long id = responseDTO.getId();
-
-    // TODO: !! 실패 시 예외처리 --> Exception Handler
-    if(id == null) {
-      return "login";
-    }
 
     // 로그인 성공 시
     HttpSession session = request.getSession();
 
     // 회원 정보 조회
-    UserResponseDTO loginUser = userService.findById(id);
+    UserResponseDTO loginUser = userService.findById(responseDTO.getId());
 
     // 세션에 로그인 회원 정보 저장
     // TODO: 세션에 어떤 정보 저장할지
