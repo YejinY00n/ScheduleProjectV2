@@ -3,6 +3,7 @@ package org.example.scheduleprojectv2.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
 import org.example.scheduleprojectv2.dto.LoginResponseDTO;
+import org.example.scheduleprojectv2.dto.PasswordDTO;
 import org.example.scheduleprojectv2.dto.PasswordUpdateRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
@@ -62,8 +63,13 @@ public class UserService {
 
 
   // 유저 삭제
-  public void delete(Long id) {
+  public void delete(Long id, PasswordDTO passwordDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
+    // 패스워드가 일치하지 않는다면
+    if(!isValidPassword(user, passwordDTO.getPassword())) {
+      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+    }
+
     userRepository.delete(user);
   }
 

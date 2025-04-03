@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.common.Const;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
 import org.example.scheduleprojectv2.dto.LoginResponseDTO;
+import org.example.scheduleprojectv2.dto.PasswordDTO;
 import org.example.scheduleprojectv2.dto.PasswordUpdateRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
@@ -70,8 +71,8 @@ public class UserController {
   // 유저 삭제
   // TODO: 비밀번호 검증
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
-    userService.delete(id);
+  public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PasswordDTO passwordDTO) {
+    userService.delete(id, passwordDTO);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
