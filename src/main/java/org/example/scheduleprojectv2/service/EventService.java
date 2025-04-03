@@ -1,6 +1,8 @@
 package org.example.scheduleprojectv2.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.dto.EventCreateRequestDTO;
 import org.example.scheduleprojectv2.dto.EventResponseDTO;
@@ -34,10 +36,38 @@ public class EventService {
   }
 
   // 할일 전체 조회
-  public List<EventResponseDTO> findAll() {
-    return eventRepository.findAll().stream()
+  public List<EventResponseDTO> findAll(
+      Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+    List<Event> results;
+    User user = null;
+    if(userId!=-1) {
+      user = userRepository.findByIdOrElseThrow(userId);
+    }
+
+    if (isValidDateRange(startDate, endDate)) {
+      // 작성자(이메일)의 기간 내의 일정 조회
+      if (user != null) {
+        results = eventRepository.findAllByUserAndModifiedAtBetween(user, startDate, endDate);
+      }
+      // 기간 내 모든 일정 조회
+      else {
+        results = eventRepository.findAllByModifiedAtBetween(startDate, endDate);
+      }
+    } else {
+      // 작성자의 모든 일정 조회
+      if (user != null) {
+        results = eventRepository.findAllByUser(user);
+      }
+      // 모든 일정 조회 (조건x)
+      else {
+        results = eventRepository.findAll();
+      }
+    }
+
+    // List<Event> --> List<EventResponseDTO>
+    return results.stream()
         .map(EventResponseDTO::new)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   // 할일 수정
@@ -63,8 +93,20 @@ public class EventService {
     eventRepository.delete(event);
   }
 
-  // 비밀번호 검증  // TODO: 이거 공통 로직으로 처리하게 할 수 있나?
+  // 비밀번호 검증
   private boolean isValidPassword(Event event, String password) {
     return event.getUser().getPassword().equals(password);
+  }
+
+  // 유효한 기간인지 검증하는 메소드
+  private boolean isValidDateRange(LocalDateTime startTime, LocalDateTime endTime) {
+    // 조회 시작일, 끝일 중 하나라도 없다면
+    if (startTime == null || endTime == null) {
+      return false;
+    }
+    // 조회 시작일이 끝일보다 나중이라면
+    else {
+      return !startTime.isAfter(endTime);
+    }
   }
 }
