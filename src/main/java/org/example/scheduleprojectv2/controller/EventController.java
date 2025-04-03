@@ -49,6 +49,7 @@ public class EventController {
   }
 
   // 할일 삭제
+  // TODO: 비밀번호 검증
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable Long id) {
     eventService.delete(id);

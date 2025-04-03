@@ -10,6 +10,7 @@ import org.example.scheduleprojectv2.entity.User;
 import org.example.scheduleprojectv2.repository.EventRepository;
 import org.example.scheduleprojectv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,8 @@ public class EventService {
   }
 
   // 할일 수정
+  // TODO: 비밀번호 검증
+  @Transactional
   public EventResponseDTO update(Long id, EventUpdateRequestDTO requestDTO) {
     Event event = eventRepository.findByIdOrElseThrow(id);
     event.update(requestDTO);

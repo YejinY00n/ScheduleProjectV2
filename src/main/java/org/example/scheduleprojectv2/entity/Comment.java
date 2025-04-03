@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.scheduleprojectv2.dto.CommentCreateRequestDTO;
+import org.example.scheduleprojectv2.dto.CommentUpdateRequestDTO;
 
 @Entity
 @Getter
@@ -42,5 +43,9 @@ public class Comment extends BaseEntity {
 
   public Comment() {
 
+  }
+
+  public void update(CommentUpdateRequestDTO requestDTO) {
+    this.content = requestDTO.getContent();
   }
 }

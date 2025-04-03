@@ -12,6 +12,7 @@ import org.example.scheduleprojectv2.exception.CustomException;
 import org.example.scheduleprojectv2.exception.ErrorCode;
 import org.example.scheduleprojectv2.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class UserService {
   }
 
   // 유저 수정
+  @Transactional
   public UserResponseDTO update(Long id, UserUpdateRequestDTO requestDTO) {
     User user = userRepository.findByIdOrElseThrow(id);
     user.update(requestDTO);
@@ -41,6 +43,8 @@ public class UserService {
     User user = userRepository.findByIdOrElseThrow(id);
     userRepository.delete(user);
   }
+
+  // TODO: 비밀번호 업데이트
 
   // 유저 로그인
   public LoginResponseDTO login(LoginRequestDTO requestDTO) {

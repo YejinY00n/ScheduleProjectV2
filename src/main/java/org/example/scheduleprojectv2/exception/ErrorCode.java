@@ -13,9 +13,13 @@ public enum ErrorCode {
 
   // User
   USER_NOT_FOUND(404, "Not Found", "U001", "User Not Found"), // 일치하는 이메일이 없다면
-  INVALID_PASSWORD(401, "Unauthorized", "U002", "Invalid Password");  // 비밀번호 오류
+  INVALID_PASSWORD(401, "Unauthorized", "U002", "Invalid Password"),  // 비밀번호 오류
 
   // Event
+
+
+  // Comment
+  COMMENT_NOT_FOUND(404, "Not Found", "U001", "Comment Not Found"); // 일치하는 이메일이 없다면
 
 
   private final int status;
