@@ -23,7 +23,11 @@ public class UserService {
 
   // 유저 생성
   public SignUpResponseDTO signUp(SignUpRequestDTO requestDTO) {
-    // TODO: email 중복 검사
+    // 이메일이 중복이라면
+    if(isExistsEmail(requestDTO.getEmail())) {
+      throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
+    }
+
     User savedUser = userRepository.save(new User(requestDTO));
     return new SignUpResponseDTO(savedUser);
   }
