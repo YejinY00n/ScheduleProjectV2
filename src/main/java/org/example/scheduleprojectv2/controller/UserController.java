@@ -3,6 +3,8 @@ package org.example.scheduleprojectv2.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduleprojectv2.common.Const;
 import org.example.scheduleprojectv2.dto.LoginRequestDTO;
@@ -11,10 +13,16 @@ import org.example.scheduleprojectv2.dto.SignUpRequestDTO;
 import org.example.scheduleprojectv2.dto.SignUpResponseDTO;
 import org.example.scheduleprojectv2.dto.UserResponseDTO;
 import org.example.scheduleprojectv2.dto.UserUpdateRequestDTO;
+import org.example.scheduleprojectv2.exception.ErrorCode;
+import org.example.scheduleprojectv2.exception.ErrorResponse;
 import org.example.scheduleprojectv2.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,9 +73,9 @@ public class UserController {
     LoginResponseDTO responseDTO = userService.login(requestDTO);
     Long id = responseDTO.getId();
 
-    // TODO: !! 실패 시 예외처리
+    // TODO: !! 실패 시 예외처리 --> Exception Handler
     if(id == null) {
-
+      return "login";
     }
 
     // 로그인 성공 시
@@ -96,5 +104,23 @@ public class UserController {
     }
     // TODO: 로그아웃 시 리다이렉트
     return "redirect";
+  }
+
+  // UserController 내부 @Valid 예외 처리
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException
+    (MethodArgumentNotValidException e) {
+    List<ErrorResponse.FieldError> fieldErrors = new ArrayList<>();
+    BindingResult bindingResult = e.getBindingResult(); // 데이터 바인딩 및 유효성 검사 결과 저장된 객체
+
+    for (FieldError fieldError:bindingResult.getFieldErrors()) {
+      ErrorResponse.FieldError error = ErrorResponse.FieldError.of(
+        fieldError.getField(),
+          fieldError.getRejectedValue().toString(),
+          fieldError.getDefaultMessage());
+      fieldErrors.add(error);
+    }
+    ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, fieldErrors);
+    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 }
